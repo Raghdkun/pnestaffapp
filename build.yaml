@@ -1,0 +1,17 @@
+# Code-generation configuration (json_serializable + injectable).
+targets:
+  $default:
+    builders:
+      json_serializable:
+        options:
+          # REST APIs typically use snake_case keys; models stay camelCase.
+          field_rename: snake
+          explicit_to_json: true
+          create_to_json: true
+          include_if_null: false
+          checked: true
+      injectable_generator:injectable_builder:
+        options:
+          auto_register: true
+          # Auto-register classes whose names match these suffixes.
+          class_name_pattern: "Service$|Repository$|Impl$|Bloc$|Cubit$|UseCase$|DataSource$"

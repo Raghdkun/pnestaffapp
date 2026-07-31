@@ -1,0 +1,42 @@
+# PNE Staff App — static analysis configuration.
+# Base ruleset: very_good_analysis (strict). App-oriented relaxations below.
+include: package:very_good_analysis/analysis_options.yaml
+
+analyzer:
+  language:
+    strict-casts: true
+    strict-raw-types: true
+  errors:
+    # Scaffolding-friendly: don't fail the analyzer on TODOs.
+    todo: ignore
+    flutter_style_todos: ignore
+    # Generated/DI wiring can legitimately trip this.
+    invalid_annotation_target: ignore
+  exclude:
+    - "**/*.freezed.dart"
+    - "**/*.g.dart"
+    - "**/*.config.dart"
+    - "**/*.gen.dart"
+    - "**/*.mocks.dart"
+    - "lib/l10n/generated/**"
+    - "build/**"
+    - ".dart_tool/**"
+
+linter:
+  rules:
+    # App (not a published package): API docs are noise.
+    public_member_api_docs: false
+    lines_longer_than_80_chars: false
+    # Freezed/bloc idioms:
+    sort_constructors_first: false
+    sort_unnamed_constructors_first: false
+    # Allow relative imports within lib for ergonomics.
+    always_use_package_imports: false
+    prefer_relative_imports: false
+    # flutter_bloc + immutable state sometimes needs these off.
+    avoid_final_parameters: false
+    one_member_abstracts: false
+    # Doc comments reference types across files without importing them.
+    comment_references: false
+    # pubspec dependencies are grouped by concern, not alphabetized.
+    sort_pub_dependencies: false

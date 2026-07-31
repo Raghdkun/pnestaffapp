@@ -1,0 +1,91 @@
+{
+  "@@locale": "en",
+  "appName": "PNE Staff",
+  "@appName": {
+    "description": "The application name shown in the UI."
+  },
+  "welcomeTitle": "Welcome",
+  "welcomeSubtitle": "Sign in to continue to PNE Staff.",
+  "loginTitle": "Sign in",
+  "emailLabel": "Email",
+  "emailHint": "you@pneunited.com",
+  "passwordLabel": "Password",
+  "loginButton": "Sign in",
+  "logoutButton": "Sign out",
+  "homeTitle": "Home",
+  "notificationsTitle": "Notifications",
+  "profileTitle": "Profile",
+  "settingsTitle": "Settings",
+  "appearanceTitle": "Appearance",
+  "themeModeLabel": "Theme mode",
+  "themeModeSystem": "System",
+  "themeModeLight": "Light",
+  "themeModeDark": "Dark",
+  "themePresetLabel": "Theme",
+  "fontLabel": "Font",
+  "textScaleLabel": "Text size",
+  "languageLabel": "Language",
+  "retry": "Retry",
+  "cancel": "Cancel",
+  "ok": "OK",
+  "greeting": "Hello, {name}!",
+  "@greeting": {
+    "description": "Greeting with the user's name.",
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "genericErrorMessage": "Something went wrong. Please try again.",
+  "networkErrorMessage": "No internet connection. Check your network and retry.",
+  "serverErrorMessage": "Our servers had a problem. Please try again shortly.",
+  "authErrorMessage": "Your session has expired. Please sign in again.",
+  "fieldRequired": "This field is required.",
+  "invalidEmail": "Enter a valid email address.",
+  "passwordTooShort": "Password must be at least {min} characters.",
+  "@passwordTooShort": {
+    "placeholders": {
+      "min": { "type": "int" }
+    }
+  },
+  "emptyNotifications": "You're all caught up.",
+  "sendTestNotification": "Send a test notification",
+  "forgotPassword": "Forgot password?",
+  "forgotPasswordTitle": "Reset password",
+  "forgotPasswordEmailPrompt": "Enter your email and we'll send you a verification code.",
+  "sendCode": "Send code",
+  "otpTitle": "Enter code",
+  "otpPrompt": "We sent a verification code to {email}. Enter it below.",
+  "@otpPrompt": {
+    "placeholders": {
+      "email": { "type": "String" }
+    }
+  },
+  "otpLabel": "Verification code",
+  "verifyCode": "Verify",
+  "resendCode": "Resend code",
+  "newPasswordTitle": "New password",
+  "newPasswordPrompt": "Choose a new password for your account.",
+  "newPasswordLabel": "New password",
+  "confirmPasswordLabel": "Confirm password",
+  "resetPasswordButton": "Reset password",
+  "passwordsDoNotMatch": "Passwords do not match.",
+  "passwordResetDoneTitle": "Password updated",
+  "passwordResetDoneSubtitle": "You can now sign in with your new password.",
+  "backToSignIn": "Back to sign in",
+  "editProfileTitle": "Edit profile",
+  "nameLabel": "Name",
+  "saveButton": "Save",
+  "changePasswordSection": "Change password (optional)",
+  "newPasswordOptionalLabel": "New password",
+  "removeAvatar": "Remove profile photo",
+  "profileUpdated": "Profile updated",
+  "rolesLabel": "Roles",
+  "emailVerified": "Email verified",
+  "employeeIdLabel": "Employee ID",
+  "employeeIdHint": "e.g. 1024",
+  "invalidEmployeeId": "Enter a valid employee ID.",
+  "activeLabel": "Active",
+  "inactiveLabel": "Inactive",
+  "storesLabel": "Stores",
+  "noStores": "No store assignments."
+}
