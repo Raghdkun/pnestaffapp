@@ -76,6 +76,7 @@ dependencies:
   envied: ^1.3.7
   path_provider: ^2.1.6
   app_links: ^6.4.1
+  shorebird_code_push: ^2.0.7
 
 dev_dependencies:
   flutter_test:

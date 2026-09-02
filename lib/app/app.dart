@@ -11,6 +11,7 @@ import 'package:pnestaffapp/core/tenant/deep_link_service.dart';
 import 'package:pnestaffapp/core/theme/app_theme.dart';
 import 'package:pnestaffapp/core/theme/cubit/theme_cubit.dart';
 import 'package:pnestaffapp/core/theme/cubit/theme_state.dart';
+import 'package:pnestaffapp/core/updates/shorebird_update_service.dart';
 import 'package:pnestaffapp/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:pnestaffapp/features/tenant/presentation/cubit/tenant_cubit.dart';
 import 'package:pnestaffapp/l10n/generated/app_localizations.dart';
@@ -41,7 +42,7 @@ class _AppView extends StatefulWidget {
   State<_AppView> createState() => _AppViewState();
 }
 
-class _AppViewState extends State<_AppView> {
+class _AppViewState extends State<_AppView> with WidgetsBindingObserver {
   final GoRouter _router = getIt<AppRouter>().router;
   StreamSubscription<String>? _notificationSub;
   StreamSubscription<String>? _deepLinkSub;
@@ -49,6 +50,8 @@ class _AppViewState extends State<_AppView> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
+
     // Deep-link on notification taps (foreground/background + cold start).
     final notificationRouter = getIt<NotificationRouter>();
     _notificationSub = notificationRouter.onSelectRoute.listen(_router.go);
@@ -69,7 +72,18 @@ class _AppViewState extends State<_AppView> {
   }
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    // Silent OTA: re-check on resume so long sessions still pick up patches.
+    // Downloads happen in the background; the patch applies on next launch.
+    if (state == AppLifecycleState.resumed) {
+      unawaited(getIt<ShorebirdUpdateService>().checkForUpdate());
+    }
+    super.didChangeAppLifecycleState(state);
+  }
+
+  @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     unawaited(_notificationSub?.cancel() ?? Future<void>.value());
     unawaited(_deepLinkSub?.cancel() ?? Future<void>.value());
     super.dispose();

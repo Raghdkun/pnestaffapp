@@ -13,6 +13,7 @@ import 'package:pnestaffapp/core/di/injection.dart';
 import 'package:pnestaffapp/core/notifications/notification_service.dart';
 import 'package:pnestaffapp/core/notifications/push_notification_service.dart';
 import 'package:pnestaffapp/core/tenant/deep_link_service.dart';
+import 'package:pnestaffapp/core/updates/shorebird_update_service.dart';
 import 'package:pnestaffapp/core/utils/app_logger.dart';
 import 'package:pnestaffapp/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:pnestaffapp/features/auth/presentation/bloc/auth_event.dart';
@@ -67,6 +68,15 @@ Future<void> bootstrap(FlavorConfig config) async {
 
       // Background task engine.
       await getIt<BackgroundTaskService>().initialize();
+
+      // Silent over-the-air updates. Non-blocking: the patch downloads in the
+      // background and applies on the next launch — the user is never prompted.
+      final updates = getIt<ShorebirdUpdateService>();
+      if (updates.isAvailable) {
+        final patch = await updates.currentPatchNumber();
+        logger.i('Shorebird active — patch: ${patch ?? 'none (base release)'}');
+        unawaited(updates.checkForUpdate());
+      }
 
       // Resolve a cold-start deep link before anything touches the network
       // layer: NetworkModule.dio / AuthInterceptor read TenantEndpoints at

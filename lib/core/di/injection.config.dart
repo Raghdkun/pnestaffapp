@@ -49,6 +49,7 @@ import 'package:pnestaffapp/core/tenant/tenant_domain_resolver.dart' as _i640;
 import 'package:pnestaffapp/core/tenant/tenant_endpoints.dart' as _i899;
 import 'package:pnestaffapp/core/tenant/tenant_storage.dart' as _i131;
 import 'package:pnestaffapp/core/theme/cubit/theme_cubit.dart' as _i17;
+import 'package:pnestaffapp/core/updates/shorebird_update_service.dart' as _i20;
 import 'package:pnestaffapp/core/utils/app_logger.dart' as _i705;
 import 'package:pnestaffapp/features/auth/data/datasources/auth_remote_data_source.dart'
     as _i733;
@@ -119,6 +120,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i705.AppLogger>(() => _i705.AppLoggerImpl());
     gh.lazySingleton<_i58.BackgroundTaskService>(
       () => _i58.BackgroundTaskService(gh<_i705.AppLogger>()),
+    );
+    gh.lazySingleton<_i20.ShorebirdUpdateService>(
+      () => _i20.ShorebirdUpdateService(gh<_i705.AppLogger>()),
     );
     gh.lazySingleton<_i36.NetworkInfo>(
       () => _i36.NetworkInfoImpl(gh<_i895.Connectivity>()),
