@@ -225,4 +225,39 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get noStores => 'No store assignments.';
+
+  @override
+  String signingInTo(String domain) {
+    return 'Signing in to $domain';
+  }
+
+  @override
+  String get notYourCompany => 'Not your company?';
+
+  @override
+  String get enterDomainTitle => 'Company portal';
+
+  @override
+  String get enterDomainPrompt =>
+      'Enter your company\'s portal domain to continue.';
+
+  @override
+  String get domainLabel => 'Company domain';
+
+  @override
+  String get domainHint => 'e.g. bmwgate.ai';
+
+  @override
+  String get invalidDomain => 'Enter a valid domain.';
+
+  @override
+  String get continueButton => 'Continue';
+
+  @override
+  String get domainNotRecognized =>
+      'We don\'t recognize that company domain. Contact your administrator.';
+
+  @override
+  String get domainCheckFailed =>
+      'Couldn\'t verify that domain. Check your connection and try again.';
 }

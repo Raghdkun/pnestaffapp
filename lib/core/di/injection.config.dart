@@ -43,6 +43,11 @@ import 'package:pnestaffapp/core/storage/key_value_storage.dart' as _i878;
 import 'package:pnestaffapp/core/storage/preferences_service.dart' as _i318;
 import 'package:pnestaffapp/core/storage/secure_storage_service.dart' as _i123;
 import 'package:pnestaffapp/core/storage/token_storage.dart' as _i840;
+import 'package:pnestaffapp/core/tenant/deep_link_service.dart' as _i665;
+import 'package:pnestaffapp/core/tenant/tenant_allowlist_service.dart' as _i162;
+import 'package:pnestaffapp/core/tenant/tenant_domain_resolver.dart' as _i640;
+import 'package:pnestaffapp/core/tenant/tenant_endpoints.dart' as _i899;
+import 'package:pnestaffapp/core/tenant/tenant_storage.dart' as _i131;
 import 'package:pnestaffapp/core/theme/cubit/theme_cubit.dart' as _i17;
 import 'package:pnestaffapp/core/utils/app_logger.dart' as _i705;
 import 'package:pnestaffapp/features/auth/data/datasources/auth_remote_data_source.dart'
@@ -67,6 +72,8 @@ import 'package:pnestaffapp/features/auth/presentation/bloc/auth_bloc.dart'
     as _i353;
 import 'package:pnestaffapp/features/auth/presentation/forgot_password/forgot_password_cubit.dart'
     as _i774;
+import 'package:pnestaffapp/features/tenant/presentation/cubit/tenant_cubit.dart'
+    as _i181;
 import 'package:shared_preferences/shared_preferences.dart' as _i460;
 
 extension GetItInjectableX on _i174.GetIt {
@@ -102,6 +109,10 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.lazySingleton<_i163.PermissionService>(() => _i163.PermissionService());
     gh.lazySingleton<_i17.ThemeCubit>(() => _i17.ThemeCubit());
+    gh.lazySingleton<_i361.Dio>(
+      () => networkModule.allowlistDio(gh<_i175.FlavorConfig>()),
+      instanceName: 'allowlist',
+    );
     gh.lazySingleton<_i123.SecureStorageService>(
       () => _i123.SecureStorageService(gh<_i558.FlutterSecureStorage>()),
     );
@@ -128,6 +139,16 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i840.TokenStorage>(
       () => _i840.TokenStorage(gh<_i123.SecureStorageService>()),
     );
+    gh.lazySingleton<_i131.TenantStorage>(
+      () => _i131.TenantStorage(gh<_i878.KeyValueStorage>()),
+    );
+    gh.lazySingleton<_i162.TenantAllowlistService>(
+      () => _i162.TenantAllowlistService(
+        gh<_i361.Dio>(instanceName: 'allowlist'),
+        gh<_i131.TenantStorage>(),
+        gh<_i705.AppLogger>(),
+      ),
+    );
     gh.lazySingleton<_i984.PushNotificationService>(
       () => _i984.PushNotificationService(
         gh<_i892.FirebaseMessaging>(),
@@ -137,11 +158,27 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i705.AppLogger>(),
       ),
     );
+    gh.lazySingleton<_i899.TenantEndpoints>(
+      () => _i899.TenantEndpoints(
+        gh<_i175.FlavorConfig>(),
+        gh<_i131.TenantStorage>(),
+      ),
+      dispose: (i) => i.dispose(),
+    );
+    gh.lazySingleton<_i640.TenantDomainResolver>(
+      () => _i640.TenantDomainResolver(
+        gh<_i899.TenantEndpoints>(),
+        gh<_i162.TenantAllowlistService>(),
+        gh<_i840.TokenStorage>(),
+        gh<_i878.KeyValueStorage>(),
+        gh<_i705.AppLogger>(),
+      ),
+    );
     gh.lazySingleton<_i330.AuthInterceptor>(
       () => _i330.AuthInterceptor(
         gh<_i840.TokenStorage>(),
         gh<_i433.SessionExpiredNotifier>(),
-        gh<_i175.FlavorConfig>(),
+        gh<_i899.TenantEndpoints>(),
         gh<_i705.AppLogger>(),
       ),
     );
@@ -149,9 +186,16 @@ extension GetItInjectableX on _i174.GetIt {
       () => networkModule.dio(
         gh<_i175.FlavorConfig>(),
         gh<_i330.AuthInterceptor>(),
+        gh<_i899.TenantEndpoints>(),
       ),
     );
     gh.lazySingleton<_i428.ApiClient>(() => _i428.ApiClient(gh<_i361.Dio>()));
+    gh.lazySingleton<_i665.DeepLinkService>(
+      () => _i665.DeepLinkService(
+        gh<_i640.TenantDomainResolver>(),
+        gh<_i705.AppLogger>(),
+      ),
+    );
     gh.lazySingleton<_i733.AuthRemoteDataSource>(
       () => _i733.AuthRemoteDataSourceImpl(gh<_i428.ApiClient>()),
     );
@@ -198,6 +242,13 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.lazySingleton<_i660.AppRouter>(
       () => _i660.AppRouter(gh<_i353.AuthBloc>()),
+    );
+    gh.lazySingleton<_i181.TenantCubit>(
+      () => _i181.TenantCubit(
+        gh<_i640.TenantDomainResolver>(),
+        gh<_i353.AuthBloc>(),
+        gh<_i899.TenantEndpoints>(),
+      ),
     );
     return this;
   }

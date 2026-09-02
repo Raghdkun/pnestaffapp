@@ -12,6 +12,8 @@ import 'package:pnestaffapp/core/widgets/primary_button.dart';
 import 'package:pnestaffapp/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:pnestaffapp/features/auth/presentation/bloc/auth_event.dart';
 import 'package:pnestaffapp/features/auth/presentation/bloc/auth_state.dart';
+import 'package:pnestaffapp/features/tenant/presentation/cubit/tenant_cubit.dart';
+import 'package:pnestaffapp/features/tenant/presentation/cubit/tenant_state.dart';
 
 /// Employee sign-in (employee id + password). On success the router's auth guard
 /// redirects to /home. Errors surface as a snackbar.
@@ -73,6 +75,8 @@ class _LoginPageState extends State<LoginPage> {
                         children: [
                           const _BrandMark(),
                           const Gap(AppSpacing.lg),
+                          const _TenantBanner(),
+                          const Gap(AppSpacing.sm),
                           Text(
                             l10n.welcomeTitle,
                             textAlign: TextAlign.center,
@@ -157,6 +161,37 @@ class _LoginPageState extends State<LoginPage> {
   String? _validatePassword(String? value) {
     if (value == null || value.isEmpty) return context.l10n.fieldRequired;
     return null;
+  }
+}
+
+/// "Signing in to `<domain>`" + a "not your company?" affordance, so it's
+/// always visible which backend the app is about to send credentials to.
+class _TenantBanner extends StatelessWidget {
+  const _TenantBanner();
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    return BlocBuilder<TenantCubit, TenantState>(
+      builder: (context, state) {
+        return Wrap(
+          alignment: WrapAlignment.center,
+          crossAxisAlignment: WrapCrossAlignment.center,
+          children: [
+            Text(
+              l10n.signingInTo(state.activeDomain),
+              style: context.textTheme.bodySmall?.copyWith(
+                color: context.colorScheme.onSurfaceVariant,
+              ),
+            ),
+            TextButton(
+              onPressed: () => context.push(AppRoutes.enterDomain),
+              child: Text(l10n.notYourCompany),
+            ),
+          ],
+        );
+      },
+    );
   }
 }
 

@@ -6,10 +6,13 @@ import 'package:go_router/go_router.dart';
 import 'package:pnestaffapp/core/di/injection.dart';
 import 'package:pnestaffapp/core/notifications/notification_router.dart';
 import 'package:pnestaffapp/core/router/app_router.dart';
+import 'package:pnestaffapp/core/router/app_routes.dart';
+import 'package:pnestaffapp/core/tenant/deep_link_service.dart';
 import 'package:pnestaffapp/core/theme/app_theme.dart';
 import 'package:pnestaffapp/core/theme/cubit/theme_cubit.dart';
 import 'package:pnestaffapp/core/theme/cubit/theme_state.dart';
 import 'package:pnestaffapp/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:pnestaffapp/features/tenant/presentation/cubit/tenant_cubit.dart';
 import 'package:pnestaffapp/l10n/generated/app_localizations.dart';
 
 /// Root widget. Provides the app-wide singletons (theme + auth) and rebuilds
@@ -24,6 +27,7 @@ class PneStaffApp extends StatelessWidget {
       providers: [
         BlocProvider.value(value: getIt<ThemeCubit>()),
         BlocProvider.value(value: getIt<AuthBloc>()),
+        BlocProvider.value(value: getIt<TenantCubit>()),
       ],
       child: const _AppView(),
     );
@@ -40,6 +44,7 @@ class _AppView extends StatefulWidget {
 class _AppViewState extends State<_AppView> {
   final GoRouter _router = getIt<AppRouter>().router;
   StreamSubscription<String>? _notificationSub;
+  StreamSubscription<String>? _deepLinkSub;
 
   @override
   void initState() {
@@ -53,11 +58,20 @@ class _AppViewState extends State<_AppView> {
         (_) => _router.go(initialRoute),
       );
     }
+
+    // Universal/App Link taps while the app is already running. Routed to
+    // the "enter domain" screen (rather than applied directly, the way the
+    // bootstrap-time cold-start link is) so an active session goes through
+    // TenantCubit's logout-first confirmation — see DeepLinkService.
+    _deepLinkSub = getIt<DeepLinkService>().onLink.listen(
+      (domain) => _router.go('${AppRoutes.enterDomain}?domain=$domain'),
+    );
   }
 
   @override
   void dispose() {
     unawaited(_notificationSub?.cancel() ?? Future<void>.value());
+    unawaited(_deepLinkSub?.cancel() ?? Future<void>.value());
     super.dispose();
   }
 

@@ -87,5 +87,20 @@
   "activeLabel": "Active",
   "inactiveLabel": "Inactive",
   "storesLabel": "Stores",
-  "noStores": "No store assignments."
+  "noStores": "No store assignments.",
+  "signingInTo": "Signing in to {domain}",
+  "@signingInTo": {
+    "placeholders": {
+      "domain": { "type": "String" }
+    }
+  },
+  "notYourCompany": "Not your company?",
+  "enterDomainTitle": "Company portal",
+  "enterDomainPrompt": "Enter your company's portal domain to continue.",
+  "domainLabel": "Company domain",
+  "domainHint": "e.g. bmwgate.ai",
+  "invalidDomain": "Enter a valid domain.",
+  "continueButton": "Continue",
+  "domainNotRecognized": "We don't recognize that company domain. Contact your administrator.",
+  "domainCheckFailed": "Couldn't verify that domain. Check your connection and try again."
 }
