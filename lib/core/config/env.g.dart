@@ -10,7 +10,7 @@ part of 'env.dart';
 // ignore_for_file: type=lint
 // generated_from: .env
 final class _Env {
-  static const String? sentryDsn = '';
+  static const String? sentryDsn = null;
 
-  static const String? apiKey = '';
+  static const String? apiKey = null;
 }

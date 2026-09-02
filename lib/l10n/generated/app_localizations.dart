@@ -507,6 +507,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No store assignments.'**
   String get noStores;
+
+  /// No description provided for @signingInTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Signing in to {domain}'**
+  String signingInTo(String domain);
+
+  /// No description provided for @notYourCompany.
+  ///
+  /// In en, this message translates to:
+  /// **'Not your company?'**
+  String get notYourCompany;
+
+  /// No description provided for @enterDomainTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Company portal'**
+  String get enterDomainTitle;
+
+  /// No description provided for @enterDomainPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your company\'s portal domain to continue.'**
+  String get enterDomainPrompt;
+
+  /// No description provided for @domainLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Company domain'**
+  String get domainLabel;
+
+  /// No description provided for @domainHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. bmwgate.ai'**
+  String get domainHint;
+
+  /// No description provided for @invalidDomain.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid domain.'**
+  String get invalidDomain;
+
+  /// No description provided for @continueButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get continueButton;
+
+  /// No description provided for @domainNotRecognized.
+  ///
+  /// In en, this message translates to:
+  /// **'We don\'t recognize that company domain. Contact your administrator.'**
+  String get domainNotRecognized;
+
+  /// No description provided for @domainCheckFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t verify that domain. Check your connection and try again.'**
+  String get domainCheckFailed;
 }
 
 class _AppLocalizationsDelegate

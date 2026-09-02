@@ -3,6 +3,7 @@
 abstract final class AppRoutes {
   static const String login = '/login';
   static const String forgotPassword = '/forgot-password';
+  static const String enterDomain = '/enter-domain';
   static const String home = '/home';
   static const String notifications = '/notifications';
   static const String settings = '/settings';
@@ -12,6 +13,7 @@ abstract final class AppRoutes {
   // Named routes (for `context.goNamed` / type-safe navigation).
   static const String loginName = 'login';
   static const String forgotPasswordName = 'forgot-password';
+  static const String enterDomainName = 'enter-domain';
   static const String homeName = 'home';
   static const String notificationsName = 'notifications';
   static const String settingsName = 'settings';

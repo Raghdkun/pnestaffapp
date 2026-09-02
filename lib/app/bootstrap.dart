@@ -12,6 +12,7 @@ import 'package:pnestaffapp/core/config/flavor.dart';
 import 'package:pnestaffapp/core/di/injection.dart';
 import 'package:pnestaffapp/core/notifications/notification_service.dart';
 import 'package:pnestaffapp/core/notifications/push_notification_service.dart';
+import 'package:pnestaffapp/core/tenant/deep_link_service.dart';
 import 'package:pnestaffapp/core/utils/app_logger.dart';
 import 'package:pnestaffapp/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:pnestaffapp/features/auth/presentation/bloc/auth_event.dart';
@@ -66,6 +67,12 @@ Future<void> bootstrap(FlavorConfig config) async {
 
       // Background task engine.
       await getIt<BackgroundTaskService>().initialize();
+
+      // Resolve a cold-start deep link before anything touches the network
+      // layer: NetworkModule.dio / AuthInterceptor read TenantEndpoints at
+      // construction, and AuthCheckRequested below is what first constructs
+      // them, so the tenant must already be resolved by this point.
+      await getIt<DeepLinkService>().handleInitialLink();
 
       // Resolve the persisted session before the first frame (no auth flash).
       final authBloc = getIt<AuthBloc>()..add(const AuthCheckRequested());

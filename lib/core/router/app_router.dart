@@ -14,6 +14,7 @@ import 'package:pnestaffapp/features/profile/presentation/view/profile_page.dart
 import 'package:pnestaffapp/features/settings/presentation/view/appearance_page.dart';
 import 'package:pnestaffapp/features/settings/presentation/view/settings_page.dart';
 import 'package:pnestaffapp/features/shell/presentation/app_shell.dart';
+import 'package:pnestaffapp/features/tenant/presentation/view/enter_domain_page.dart';
 
 /// Central navigation. The [AuthBloc]-driven [_redirect] guard gates the whole
 /// authenticated area; `refreshListenable` re-runs it on sign-in/out. Every
@@ -50,6 +51,14 @@ class AppRouter {
         name: AppRoutes.forgotPasswordName,
         pageBuilder: (context, state) =>
             fadeThroughPage(state, const ForgotPasswordPage()),
+      ),
+      GoRoute(
+        path: AppRoutes.enterDomain,
+        name: AppRoutes.enterDomainName,
+        pageBuilder: (context, state) => fadeThroughPage(
+          state,
+          EnterDomainPage(prefillDomain: state.uri.queryParameters['domain']),
+        ),
       ),
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) =>
@@ -117,7 +126,9 @@ class AppRouter {
 
     final location = state.matchedLocation;
     final isPublic =
-        location == AppRoutes.login || location == AppRoutes.forgotPassword;
+        location == AppRoutes.login ||
+        location == AppRoutes.forgotPassword ||
+        location == AppRoutes.enterDomain;
     final isLoggedIn = status == AuthStatus.authenticated;
 
     if (!isLoggedIn) return isPublic ? null : AppRoutes.login;

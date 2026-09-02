@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
-import 'package:pnestaffapp/core/config/flavor.dart';
 import 'package:pnestaffapp/core/network/session_expired_notifier.dart';
 import 'package:pnestaffapp/core/storage/token_storage.dart';
+import 'package:pnestaffapp/core/tenant/tenant_endpoints.dart';
 import 'package:pnestaffapp/core/utils/app_logger.dart';
 
 /// Attaches the bearer token and transparently recovers from a 401 by rotating
@@ -16,24 +16,32 @@ class AuthInterceptor extends Interceptor {
   AuthInterceptor(
     this._tokenStorage,
     this._sessionExpired,
-    this._config,
+    this._tenantEndpoints,
     this._logger,
-  );
+  ) {
+    // Built in the constructor body (not a `late final` field initializer)
+    // so it can be seeded from `_tenantEndpoints` and then kept in sync via
+    // the subscription below — an inline initializer can't do both.
+    _bareDio = Dio(
+      BaseOptions(
+        baseUrl: _tenantEndpoints.authBaseUrl.toString(),
+        headers: const {'Accept': 'application/json'},
+      ),
+    );
+    _tenantEndpoints.onDomainChanged.listen(
+      (_) => _bareDio.options.baseUrl = _tenantEndpoints.authBaseUrl.toString(),
+    );
+  }
 
   final TokenStorage _tokenStorage;
   final SessionExpiredNotifier _sessionExpired;
-  final FlavorConfig _config;
+  final TenantEndpoints _tenantEndpoints;
   final AppLogger _logger;
 
   static const String _authHeader = 'Authorization';
 
   /// Interceptor-free client used for refresh + retry (avoids recursion).
-  late final Dio _bareDio = Dio(
-    BaseOptions(
-      baseUrl: _config.baseUrl,
-      headers: const {'Accept': 'application/json'},
-    ),
-  );
+  late final Dio _bareDio;
 
   /// Single in-flight refresh shared by all requests that 401 together.
   Future<String?>? _refreshing;

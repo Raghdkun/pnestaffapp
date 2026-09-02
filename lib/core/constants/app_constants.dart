@@ -23,6 +23,9 @@ abstract final class StorageKeys {
   static const String fcmToken = 'notifications.fcm_token';
   static const String deviceId = 'device.id';
   static const String onboardingComplete = 'app.onboarding_complete';
+  static const String tenantActiveDomain = 'tenant.active_domain';
+  static const String tenantAllowlistCache = 'tenant.allowlist_cache';
+  static const String tenantAllowlistCachedAt = 'tenant.allowlist_cached_at';
 }
 
 /// Hive box names.
